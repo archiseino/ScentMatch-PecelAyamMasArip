@@ -9,7 +9,7 @@ import Slider from '../components/Slider';
 import Navigation from '../components/Navigation';
 import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
-import { getRecommendations } from '../utils/SupabaseClient';
+import { getRecommendations } from '../utils/supabaseClient';
 import { useAppContext } from '../context/AppContext';
 
 export default function Onboarding() {
