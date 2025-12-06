@@ -27,6 +27,7 @@ import mockRecommendations from '../utils/mockRec';
  */
 
 export default function RecommendationResults({
+  recommendation,
   preferences,
   onStartOver,
   onCustomize,
@@ -62,7 +63,7 @@ export default function RecommendationResults({
 
       {/* Recommendations */}
       <Recomendation
-        recomendations={mockRecommendations}
+        recomendations={recommendation}
         onCustomize={onCustomize}
       />
       <section className='container mx-auto px-2 pb-16'></section>

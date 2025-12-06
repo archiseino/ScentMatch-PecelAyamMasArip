@@ -2,16 +2,16 @@ export default function Occasions({ handleSelect, isSelected }) {
   return (
     <div className='grid grid-cols-2 gap-4'>
       {[
-        'Sehari-Hari',
-        'Kantor & Profesional',
-        'Menjelang Malam',
-        'Formal & Spesial',
-        'Olahraga & Outdoor',
-        'Kencan Malam',
+        'Sehari-hari',
+        'Kantor ',
+        'Casual',
+        'Formal',
+        'Outdoor',
+        'Romantis',
       ].map((occasion) => (
         <button
           key={occasion}
-          onClick={() => handleSelect('occasions', occasion, true)}
+          onClick={() => handleSelect('occasions', occasion, false)}
           className={`p-6 rounded-2xl border-2 transition-all shadow-md active:scale-[0.98] ${
             isSelected(occasion)
               ? 'border-rose-600 bg-rose-50 shadow-rose-300/50'

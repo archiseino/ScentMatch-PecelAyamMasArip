@@ -10,6 +10,7 @@ export default function PrefSummary({ preferences }) {
           preferences.gender,
           `${preferences.intensity} Intensity`,
           `Range Harga ${preferences.price}`,
+          preferences.occasions,
         ].map((p, i) => (
           <span
             key={i}
@@ -28,14 +29,14 @@ export default function PrefSummary({ preferences }) {
           </span>
         ))}
         {/* Occasions - Tertiary */}
-        {preferences.occasions.map((occasion) => (
+        {/* {preferences.occasions.map((occasion) => (
           <span
             key={occasion}
             className='px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm font-medium shadow-inner'
           >
             {occasion}
           </span>
-        ))}
+        ))} */}
       </div>
     </div>
   );

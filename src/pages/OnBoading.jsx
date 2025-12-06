@@ -18,7 +18,7 @@ export default function Onboarding({ onComplete, onBack }) {
     gender: '',
     intensity: '',
     notes: [],
-    occasions: [],
+    occasions: '',
     price: '',
   });
 
@@ -66,6 +66,7 @@ export default function Onboarding({ onComplete, onBack }) {
     if (!canProceed()) return;
 
     if (isLastStep) {
+      console.log('Onboarding Complete:', preferences);
       onComplete(preferences);
     } else {
       setCurrentStep((prev) => prev + 1);
