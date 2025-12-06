@@ -2,7 +2,7 @@ import Hero from '../components/Hero';
 import Header from '../components/Header';
 import Features from '../components/Features';
 
-export default function LandingPage({ onGetStarted }) {
+export default function LandingPage() {
   return (
     <div className='min-h-screen bg-gradient-to-br from-rose-50 via-white to-amber-50'>
       {/* Header */}
@@ -10,7 +10,7 @@ export default function LandingPage({ onGetStarted }) {
       <hr className='my-0' />
 
       {/* Hero Section */}
-      <Hero onGetStarted={onGetStarted} />
+      <Hero />
       <hr className='my-0' />
 
       {/* Features Section */}

@@ -1,6 +1,7 @@
 import { Sparkles, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-export default function Hero({ onGetStarted }) {
+export default function Hero() {
   return (
     <section className='container mx-auto px-6 py-20'>
       <div className='grid md:grid-cols-2 gap-12 items-center'>
@@ -16,13 +17,12 @@ export default function Hero({ onGetStarted }) {
             berbasis AI kami menemukan wewangian yang sempurna sesuai dengan
             preferensi dan kepribadian unikmu.
           </p>
-          <button
-            onClick={onGetStarted}
-            className='group px-8 py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-full transition-all flex items-center gap-2 shadow-lg hover:shadow-xl'
-          >
-            Mulai
-            <ChevronRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
-          </button>
+          <Link to='/onboarding'>
+            <button className='group px-8 py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-full transition-all flex items-center gap-2 shadow-lg hover:shadow-xl'>
+              Mulai
+              <ChevronRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
+            </button>
+          </Link>
           <div className='flex items-center gap-8 pt-6'>
             {/* <div>
               <div className='text-rose-900'>10,000+</div>

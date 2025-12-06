@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import slides from '../utils/slider';
 import Gender from '../components/Question/Gender';
 import Intensity from '../components/Question/Intensity';
@@ -9,12 +8,16 @@ import Price from '../components/Question/Price';
 import Slider from '../components/Slider';
 import Navigation from '../components/Navigation';
 import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
+import { getRecommendations } from '../utils/SupabaseClient';
+import { useAppContext } from '../context/AppContext';
 
-export default function Onboarding({ onComplete, onBack }) {
+export default function Onboarding() {
   // Use State For Slider
   const [currentStep, setCurrentStep] = useState(0);
+  const navigate = useNavigate();
+  const { setUserPreferences, setRecommendation } = useAppContext();
   const [preferences, setPreferences] = useState({
-    //     /** @type {UserPreferences} */ ({
     gender: '',
     intensity: '',
     notes: [],
@@ -62,12 +65,24 @@ export default function Onboarding({ onComplete, onBack }) {
   /**
    * Moves to the next step or completes the onboarding.
    */
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!canProceed()) return;
 
     if (isLastStep) {
-      console.log('Onboarding Complete:', preferences);
-      onComplete(preferences);
+      try {
+        setUserPreferences(preferences);
+        const { data: perfumes } = await getRecommendations(preferences);
+        console.log('Fetched perfumes:', perfumes);
+
+        if (perfumes) {
+          setRecommendation(perfumes);
+          navigate('/results'); // navigate AFTER state updates
+        } else {
+          console.error('No perfumes returned');
+        }
+      } catch (error) {
+        console.error('Error in handleNext:', error);
+      }
     } else {
       setCurrentStep((prev) => prev + 1);
     }
@@ -78,16 +93,11 @@ export default function Onboarding({ onComplete, onBack }) {
    */
   const handlePrevious = () => {
     if (currentStep === 0) {
-      onBack();
+      navigate('/');
     } else {
       setCurrentStep((prev) => prev - 1);
     }
   };
-
-  /**
-   * Renders the specific option buttons based on the current slide question.
-   * @returns {JSX.Element | null}
-   */
 
   const renderOptions = () => {
     const currentValue = preferences[currentSlide.question];

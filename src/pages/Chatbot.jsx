@@ -15,11 +15,11 @@ import {
   Minus,
 } from 'lucide-react';
 
-import { AI_SUGGESTIONS, AVAILABLE_NOTES } from '../utils/mockBot';
-import generateAIResponse from '../utils/mockRes';
 import HeaderChatbot from '../components/HeaderChatbot';
 import { GoogleGenAI } from '@google/genai';
 import ReactMarkdown from 'react-markdown';
+import { useAppContext } from '../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -30,38 +30,39 @@ if (!apiKey) {
 
 const ai = new GoogleGenAI({ apiKey: apiKey });
 
-export default function ChatbotCoCreation({ basePerfume, onBack }) {
-  const buildInitialBlend = (perfume) => ({
-    name: `Custom ${perfume.name}`,
-    baseFragrance: perfume.name,
-    topNotes: perfume.notes_structured.top.map((n) => ({
+export default function ChatbotCoCreation() {
+  const { selectedPerfume } = useAppContext();
+  const navigate = useNavigate();
+
+  const buildInitialBlend = (selectedPerfume) => ({
+    name: `Custom ${selectedPerfume.name}`,
+    baseFragrance: selectedPerfume.name,
+    topNotes: selectedPerfume.notes_structured.top.map((n) => ({
       name: n,
       intensity: 60,
     })),
-    heartNotes: perfume.notes_structured.middle.map((n) => ({
+    heartNotes: selectedPerfume.notes_structured.middle.map((n) => ({
       name: n,
       intensity: 60,
     })),
-    baseNotes: perfume.notes_structured.base.map((n) => ({
+    baseNotes: selectedPerfume.notes_structured.base.map((n) => ({
       name: n,
       intensity: 60,
     })),
-    mood: [perfume.main_accord],
-    occasions: [perfume.activity],
+    mood: [selectedPerfume.main_accord],
+    occasions: [selectedPerfume.activity],
     intensity: 70,
   });
 
   const [customBlend, setCustomBlend] = useState(() =>
-    buildInitialBlend(basePerfume)
+    buildInitialBlend(selectedPerfume)
   );
-
-  // console.log('Initial custom blend:', customBlend);
 
   const [messages, setMessages] = useState([
     {
       id: '1',
       sender: 'ai',
-      text: `Halo, dengan saya Asisten AI untuk berdiskusi mengenai konten parfum Anda. Pilihan parfum ${basePerfume.name} oleh ${basePerfume.brand} adalah awal yang bagus! Bagaimana Anda ingin menyesuaikan campuran parfum Anda hari ini? Apakah Anda ingin menambahkan catatan tertentu, mengubah intensitas, atau menyesuaikan suasana hati dan kesempatan? Silakan beri tahu saya preferensi Anda!`,
+      text: `Halo, dengan saya Asisten AI untuk berdiskusi mengenai konten parfum Anda. Pilihan parfum ${selectedPerfume.name} oleh ${selectedPerfume.brand} adalah awal yang bagus! Bagaimana Anda ingin menyesuaikan campuran parfum Anda hari ini? Apakah Anda ingin menambahkan catatan tertentu, mengubah intensitas, atau menyesuaikan suasana hati dan kesempatan? Silakan beri tahu saya preferensi Anda!`,
       timestamp: new Date(),
     },
   ]);
@@ -80,10 +81,10 @@ export default function ChatbotCoCreation({ basePerfume, onBack }) {
           model: 'gemini-2.5-flash',
           config: {
             systemInstruction: `You are a professional perfume creator assistant. Help users customize their perfume blend based on ${
-              basePerfume.name
-            } by ${basePerfume.brand}. 
+              selectedPerfume.name
+            } by ${selectedPerfume.brand}. 
             
-Base notes: ${basePerfume.all_notes.join(', ')}
+Base notes: ${selectedPerfume.all_notes.join(', ')}
 
 When users request changes:
 1. Suggest specific note adjustments
@@ -98,7 +99,7 @@ When users request changes:
       }
     };
     initChat();
-  }, [basePerfume]);
+  }, [selectedPerfume]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -185,19 +186,19 @@ When users request changes:
       User request: ${inputText}
 
       Base perfume:
-      - Name: ${basePerfume.name} by ${basePerfume.brand}
-      - Gender: ${basePerfume.gender}
-      - Price tier: ${basePerfume.price_tier}
-      - Season: ${basePerfume.season}
-      - Activity: ${basePerfume.activity}
-      - Longevity: ${basePerfume.longevity}
-      - Projection: ${basePerfume.projection}
-      - Main accord: ${basePerfume.main_accord}
-      - Notes: ${basePerfume.all_notes.join(', ')}
+      - Name: ${selectedPerfume.name} by ${selectedPerfume.brand}
+      - Gender: ${selectedPerfume.gender}
+      - Price tier: ${selectedPerfume.price_tier}
+      - Season: ${selectedPerfume.season}
+      - Activity: ${selectedPerfume.activity}
+      - Longevity: ${selectedPerfume.longevity}
+      - Projection: ${selectedPerfume.projection}
+      - Main accord: ${selectedPerfume.main_accord}
+      - Notes: ${selectedPerfume.all_notes.join(', ')}
       - Structured:
-        • Top: ${basePerfume.notes_structured.top.join(', ')}
-        • Middle: ${basePerfume.notes_structured.middle.join(', ')}
-        • Base: ${basePerfume.notes_structured.base.join(', ')}
+        • Top: ${selectedPerfume.notes_structured.top.join(', ')}
+        • Middle: ${selectedPerfume.notes_structured.middle.join(', ')}
+        • Base: ${selectedPerfume.notes_structured.base.join(', ')}
 
       Current blend JSON:
       ${JSON.stringify(customBlend, null, 2)}
@@ -260,43 +261,13 @@ When users request changes:
     }));
   };
 
-  // const updateBlendFromAI = (aiText) => {
-  //   // Simple keyword detection - enhance this based on your needs
-  //   const text = aiText.toLowerCase();
-
-  //   if (text.includes('more floral')) {
-  //     setCustomBlend((prev) => ({
-  //       ...prev,
-  //       heartNotes: prev.heartNotes.map((note) =>
-  //         ['rose', 'jasmine', 'lavender'].includes(note.name.toLowerCase())
-  //           ? { ...note, intensity: Math.min(100, note.intensity + 10) }
-  //           : note
-  //       ),
-  //     }));
-  //   }
-
-  //   if (text.includes('woody') || text.includes('sandalwood')) {
-  //     setCustomBlend((prev) => ({
-  //       ...prev,
-  //       baseNotes: prev.baseNotes.map((note) =>
-  //         note.name.toLowerCase().includes('wood')
-  //           ? { ...note, intensity: Math.min(100, note.intensity + 10) }
-  //           : note
-  //       ),
-  //     }));
-  //   }
-  // };
-
-  /**
-   * @param {'topNotes' | 'heartNotes' | 'baseNotes'} layer
-   * @param {string} noteName
-   * @param {number} delta
-   */
-
   return (
     <div className='min-h-screen bg-gradient-to-br from-rose-50 via-white to-amber-50'>
       {/* Header */}
-      <HeaderChatbot onBack={onBack} customBlend={customBlend} />
+      <HeaderChatbot
+        onBack={() => navigate('/result')}
+        customBlend={customBlend}
+      />
 
       {/* Messages */}
       <div className='container mx-auto px-6 py-8'>

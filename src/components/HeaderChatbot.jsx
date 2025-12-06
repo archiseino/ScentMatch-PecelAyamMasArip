@@ -1,15 +1,5 @@
-import { handleExport } from '../utils/exports';
-import {
-  Sparkles,
-  Send,
-  ArrowLeft,
-  Beaker,
-  Heart,
-  Download,
-  Mail,
-  Plus,
-  Minus,
-} from 'lucide-react';
+import { handleExport } from '../utils/exportFormula';
+import { ArrowLeft, Beaker, Download } from 'lucide-react';
 
 export default function HeaderChatbot({ onBack, customBlend }) {
   return (

@@ -117,15 +117,15 @@ export default function Recomendation({ recomendations, onCustomize }) {
                   </button>
 
                   {/* Add to Cart Button */}
-                  <button className='px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-full transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center gap-1 font-medium shadow-lg shadow-rose-400/50 text-sm'>
+                  {/* <button className='px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-full transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center gap-1 font-medium shadow-lg shadow-rose-400/50 text-sm'>
                     <ShoppingCart className='w-4 h-4' />
                     Buy Now
-                  </button>
+                  </button> */}
 
                   {/* Wishlist Button */}
-                  <button className='p-2 rounded-full border-2 border-gray-200 hover:border-rose-600 hover:text-rose-600 transition-colors bg-white shadow-sm text-gray-500'>
+                  {/* <button className='p-2 rounded-full border-2 border-gray-200 hover:border-rose-600 hover:text-rose-600 transition-colors bg-white shadow-sm text-gray-500'>
                     <Heart className='w-5 h-5' />
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>

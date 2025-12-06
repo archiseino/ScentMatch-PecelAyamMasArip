@@ -1,43 +1,32 @@
-import React from 'react';
 import { Sparkles } from 'lucide-react';
 import Header from '../components/Header';
 import PrefSummary from '../components/PrefSummary';
 import Recomendation from '../components/Recomendation';
-import mockRecommendations from '../utils/mockRec';
-
-/**
- * @typedef {object} UserPreferences
- * @property {string} gender
- * @property {string} intensity
- * @property {string[]} notes
- * @property {string[]} occasions
- * @property {string} season
- */
-
-/**
- * @typedef {object} RecommendationResultsProps
- * @property {UserPreferences} preferences - User preferences used for display.
- * @property {() => void} onStartOver - Handler to restart the onboarding.
- * @property {(perfume: any) => void} onCustomize - Handler to customize a perfume.
- */
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../context/AppContext';
 
 /**
  * Display component for the final fragrance recommendations.
  * This component is exported as 'App' for standalone runnability.
  */
 
-export default function RecommendationResults({
-  recommendation,
-  preferences,
-  onStartOver,
-  onCustomize,
-}) {
+export default function RecommendationResults() {
+  const navigate = useNavigate();
+  const { recommendation, userPreferences, setSelectedPerfume } =
+    useAppContext();
+  console.log(recommendation);
+
+  const onCustomize = (perfume) => {
+    setSelectedPerfume(perfume);
+    navigate('/cocreation');
+  };
+
   return (
     <div className='min-h-screen bg-gradient-to-br from-rose-50 via-white to-amber-50 font-sans p-4 sm:p-8'>
       {/* Header */}
       <Header
         Title='ScentMatch Finder'
-        Action={onStartOver}
+        Action={() => navigate('/onboarding')}
         ActionLabel='Start Over'
       />
 
@@ -58,7 +47,7 @@ export default function RecommendationResults({
         </div>
 
         {/* Preferences Summary */}
-        <PrefSummary preferences={preferences} />
+        <PrefSummary preferences={userPreferences} />
       </section>
 
       {/* Recommendations */}
